@@ -33,7 +33,11 @@ public class Tarea {
         strategy = GenerationType.SEQUENCE
     )
     private Integer id;
-    private Integer id_proyecto;
+
+    @ManyToOne
+    @JoinColumn(name = "id_proyecto") // Nombre de la columna en la tabla tarea que referencia al proyecto
+    private Proyecto proyecto;
+    
     private Integer id_usuario_asignado;
     private String descripcion;
     //private Estado estado;

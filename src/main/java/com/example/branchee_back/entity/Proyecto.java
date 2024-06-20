@@ -39,9 +39,11 @@ public class Proyecto {
     private Integer id_boss;
     private String image;
 
-    
-
     @ManyToMany(mappedBy = "proyectos")
     private Set<Usuario> usuarios;
+
+    @OneToMany(mappedBy = "proyecto")
+    private Set<Tarea> tareas;
+    
 
 }
