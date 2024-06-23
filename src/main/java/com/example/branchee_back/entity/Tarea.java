@@ -7,9 +7,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -38,11 +38,18 @@ public class Tarea {
     @JoinColumn(name = "id_proyecto") // Nombre de la columna en la tabla tarea que referencia al proyecto
     private Proyecto proyecto;
     
-    private Integer id_usuario_asignado;
     private String descripcion;
-    //private Estado estado;
-    //private Importancia importancia;
     private String image;
 
-   
+    @OneToMany(mappedBy = "tarea")
+    private Set<Usuario> usuarios;
+
+    @OneToOne
+    @JoinColumn(name = "id_estado", referencedColumnName = "id")
+    private Estado estado;
+
+    @OneToOne
+    @JoinColumn(name = "id_importancia", referencedColumnName = "id")
+    private Importancia importancia;
+
 }

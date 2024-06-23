@@ -9,6 +9,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
@@ -58,6 +59,10 @@ public class Usuario {
         inverseJoinColumns = @JoinColumn(name = "proyecto_id")
     )
     private Set<Proyecto> proyectos;
+
+    @ManyToOne
+    @JoinColumn(name = "id_tarea")
+    private Tarea tarea;
 
     
 }
