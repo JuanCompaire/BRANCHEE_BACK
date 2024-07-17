@@ -8,7 +8,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
@@ -17,6 +16,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.util.Set;
+
 @Entity
 @Data
 @NoArgsConstructor
@@ -34,7 +34,7 @@ public class Usuario {
     @SequenceGenerator(
         name = "user_sequence",
         sequenceName = "user_sequence",
-        allocationSize = 50
+        allocationSize = 1
     )
     @GeneratedValue(
         generator = "user_sequence",
@@ -42,6 +42,10 @@ public class Usuario {
     )
     private Integer id;
 
+    @Column(
+        name = "username",
+        nullable = false
+    )
     private String username;
 
     @Column(
@@ -50,8 +54,12 @@ public class Usuario {
     )
     private String email;
 
+    @Column(
+        name = "password",
+        nullable = false
+    )
     private String password;
-
+/*
     @ManyToMany
     @JoinTable(
         name = "usuario_proyecto",
@@ -62,7 +70,7 @@ public class Usuario {
 
     @ManyToOne
     @JoinColumn(name = "id_tarea")
+    @Column(nullable = true)
     private Tarea tarea;
-
-    
+   */
 }
