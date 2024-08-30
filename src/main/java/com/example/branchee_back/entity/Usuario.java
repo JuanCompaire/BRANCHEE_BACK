@@ -62,7 +62,7 @@ public class Usuario {
         nullable = false
     )
     private String password;
-/*
+
     @ManyToMany
     @JoinTable(
         name = "usuario_proyecto",
@@ -70,12 +70,6 @@ public class Usuario {
         inverseJoinColumns = @JoinColumn(name = "proyecto_id")
     )
     private Set<Proyecto> proyectos;
-
-    @ManyToOne
-    @JoinColumn(name = "id_tarea")
-    @Column(nullable = true)
-    private Tarea tarea;
-   */
 
    public Integer getId(){
     return id;

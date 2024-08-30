@@ -1,5 +1,6 @@
 package com.example.branchee_back.entity;
 
+import java.util.Date;
 import java.util.Set;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -12,7 +13,7 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-/*
+
 @Entity
 @Data
 @NoArgsConstructor
@@ -34,15 +35,13 @@ public class Proyecto {
     private Integer id;
     private String name;
     private Integer id_boss;
-    private String image;
+    private String date_create;
 
     @ManyToMany(mappedBy = "proyectos")
     private Set<Usuario> usuarios;
 
-    @OneToMany(mappedBy = "proyecto")
-    private Set<Tarea> tareas;
+    
     
 
 }
 
-*/
