@@ -37,11 +37,9 @@ public class Proyecto {
     private Integer id_boss;
     private String date_create;
 
+    //relation ManyToMany with user
     @ManyToMany(mappedBy = "proyectos")
     private Set<Usuario> usuarios;
-
-    
-    
 
 }
 

@@ -17,7 +17,6 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import java.util.Set;
 
 @Entity
@@ -63,6 +62,7 @@ public class Usuario {
     )
     private String password;
 
+    //relation ManyToMany with Proyect
     @ManyToMany
     @JoinTable(
         name = "usuario_proyecto",
@@ -102,7 +102,4 @@ public class Usuario {
     public void setPassword(String password) {
         this.password = password;
     }
-
-
-
 }
