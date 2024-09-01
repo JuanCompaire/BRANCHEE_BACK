@@ -2,6 +2,10 @@ package com.example.branchee_back.controller;
 
 import com.example.branchee_back.entity.Usuario;
 import com.example.branchee_back.service.UsuarioService;
+
+import jakarta.servlet.http.HttpSession;
+
+import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -52,9 +56,42 @@ public class UsuarioController {
         }
     }
 
+    @GetMapping("/me")
+public ResponseEntity<?> getCurrentUser(@RequestHeader(value = "Authorization", required = false) String token) {
+    // Verificar si el token está presente
+    if (token == null || !sessionTokens.containsKey(token)) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Usuario no autenticado");
+    }
+
+    // Obtener el correo electrónico del usuario asociado al token
+    String email = sessionTokens.get(token);
+
+    // Obtener el objeto Usuario del servicio, basado en el correo electrónico
+    Usuario currentUser = service.findUserByEmail(email);
+    
+    if (currentUser == null) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Usuario no encontrado");
+    }
+
+    return ResponseEntity.ok(currentUser);
+}
+
+
     @GetMapping("/getUsers")//EndPoint --> /api/auth/getUsers
     //Method to recive the list of all users
     public ResponseEntity<?> getUsers() {
         return ResponseEntity.ok(service.getUsers());
     }
+
+    @GetMapping("/getUsersByString")//EndPoint --> /api/auth/getUsersByString
+    //Method to recibe a list of user which contains a specific string
+    public ResponseEntity<?> getUsersByString(@RequestParam(value = "string", required = false)String string){
+        System.out.println("getUsersByString : "+ string);
+        if (string == null || string.isEmpty()) {
+            // if u dont put any word, it gives all users
+            return ResponseEntity.ok(service.getUsers());
+        }       
+        return ResponseEntity.ok(service.getUsersByString(string));
+    }
+
 }

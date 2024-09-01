@@ -3,6 +3,8 @@ package com.example.branchee_back.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.example.branchee_back.entity.Usuario;
 import com.example.branchee_back.respository.UsuarioRepository;
+import com.github.javafaker.Faker;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
@@ -12,6 +14,9 @@ public class UsuarioService {
 
     @Autowired
     private UsuarioRepository repository;
+
+    //to use faker dependecy to create fake data
+    Faker faker = new Faker();
 
     //Method to login the user
     public boolean loginUser(String email, String password) {
@@ -31,16 +36,35 @@ public class UsuarioService {
     @Transactional
     public void SignUpUser(Usuario user) {
         repository.save(user);
+        /* to fake data in users table
+        for (int i=0;i< 50;i++){
+           Usuario newUser = new Usuario();
+           newUser.setUsername(faker.name().fullName());
+           newUser.setEmail(faker.name().username() + "@gmail.com");
+           newUser.setPassword(faker.lorem().characters(8,16));
+            repository.save(newUser);
+        }*/
     }
 
     //Method to get all the users
     public Object getUsers() {
         return repository.findAll();
     }
+    //Method to recibe a list of user which contains a specific string
+    public Object getUsersByString(String string){
+        System.out.println("El string que llega al repository es : "+string);
+        return repository.getUsersByString(string);
+        
+    }
 
-    //Method to find a user by the email
+    public Usuario findUserByEmail(String email) {
+        return repository.findByEmail(email);
+    }
+
+    /*Method to find a user by the email
     public Usuario findByEmail(String email) {
         Optional<Usuario> user = repository.findByEmail(email);
         return user.orElse(null);
     }
+        */
 }
