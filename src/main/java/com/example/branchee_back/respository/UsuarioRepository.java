@@ -22,4 +22,12 @@ public interface UsuarioRepository extends JpaRepository<Usuario,Long>{
     @Query(value = "SELECT u.* FROM usuario u WHERE u.username LIKE CONCAT(:string, '%')", nativeQuery = true)
     List<Usuario> getUsersByString(@Param("string") String string);
 
+    @Transactional
+    @Query(value = "select u.* from proyecto p inner join usuario_proyecto up on p.id =up.proyecto_id inner join usuario u on up.usuario_id = u.id where p.id = :id ;", nativeQuery = true)
+    List<Usuario> getUsersByProyectId(@Param("id") Integer id);
+
+    @Transactional
+    @Query(value = "select u.* from usuario u where u.id = :id ;", nativeQuery = true)
+    Usuario findById(@Param("id") Integer id);
+
 }

@@ -31,6 +31,20 @@ public class ProyectoService {
             repository.insertProyectoUsers(proyectoId,userId);
         }
     }
+
+    public List<Proyecto> getProyectsByUserId(Integer id){
+        System.out.println("Se llama al getProyectsByUserId del repository con esta id : "+id);
+        return repository.getProyectsByUserId(id);
+    }
+
+    public Proyecto getProyectoById(Integer id){
+        System.out.println("Se llama al getProyectoById del repository con esta id : "+id);
+        return repository.getProyectoById(id);
+    }
+
+    public Object getAllProjects() {
+        return repository.getAllProyectos();
+    }
 }
 
 

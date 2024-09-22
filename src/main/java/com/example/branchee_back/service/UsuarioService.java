@@ -50,11 +50,20 @@ public class UsuarioService {
     public Object getUsers() {
         return repository.findAll();
     }
+    
+    public Object getUser(Integer id){
+        return repository.findById(id);
+    }
+
     //Method to recibe a list of user which contains a specific string
     public Object getUsersByString(String string){
         System.out.println("El string que llega al repository es : "+string);
-        return repository.getUsersByString(string);
-        
+        return repository.getUsersByString(string); 
+    }
+
+    public Object getUsersByProyectId(Integer id){
+        System.out.println("El id del proyecto para conseguir los usuarios es : "+id);
+        return repository.getUsersByProyectId(id);
     }
 
     public Usuario findUserByEmail(String email) {

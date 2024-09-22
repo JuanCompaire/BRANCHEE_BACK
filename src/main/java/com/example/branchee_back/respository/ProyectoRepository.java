@@ -19,5 +19,24 @@ public interface ProyectoRepository extends JpaRepository<Proyecto,Long>{
     //Postgres Query to insert the users and proyects in their intermediate table.
     @Query(value = "insert into usuario_proyecto (usuario_id,proyecto_id) values(:user_id, :proyecto_id)", nativeQuery = true)
     void insertProyectoUsers(@Param("proyecto_id")Integer id_proyect,@Param("user_id")Integer id_user);
+
+    @Transactional
+    @Query(value = "select p.* \r\n" + //
+                "from usuario u inner join usuario_proyecto up on u.id = up.usuario_id inner join proyecto p on up.proyecto_id = p.id \r\n" + //
+                "where u.id = :id \r\n" + //
+                "union ALL\r\n" + //
+                "select p.*\r\n" + //
+                "from proyecto p \r\n" + //
+                "where id_boss = :id\r\n" + //
+                ";"+ " ;",nativeQuery = true)
+    List<Proyecto> getProyectsByUserId(@Param("id")Integer id);
+
+    @Transactional
+    @Query(value = "select * from  proyecto  where id = :id"+ " ;",nativeQuery = true)
+    Proyecto getProyectoById(@Param("id")Integer id);
+
+    @Transactional
+    @Query(value = "select * from proyecto;",nativeQuery = true)
+    List<Proyecto> getAllProyectos();
    
 }

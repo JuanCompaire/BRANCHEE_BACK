@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.example.branchee_back.entity.ProyectRequest;
 import com.example.branchee_back.entity.Proyecto;
@@ -37,6 +38,26 @@ public class ProyectoController {
         } else {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
+    }
+    //Method to recive the proyects in which the user who log in, is participating
+    @GetMapping("/getProyectsByUserId")//EndPoint --> /api/proyect/getProyectsByUserId
+    public ResponseEntity<?> getProyectsByUserId(@RequestParam(value = "id", required = true)Integer id){
+        System.out.println("Id de usuario para recibir los proyectos en los que participa : "+ id);
+        if (id == null || id <= 0) {
+            // Suponiendo que quieras devolver algunos proyectos predeterminados o todos los proyectos
+            return ResponseEntity.ok(service.getAllProjects()); // Suponiendo que el método getAllProjects exista
         }
-        
+        return ResponseEntity.ok(service.getProyectsByUserId(id)); 
+    }
+
+    @GetMapping("/getProyectoById")//EndPoint --> /api/proyect/getProyectoById
+    public ResponseEntity<?> getProyectoById(@RequestParam(value = "id", required = true)Integer id){
+        System.out.println("Id del proyecto a buscar : "+ id);
+        if (id == null || id <= 0) {
+            // Suponiendo que quieras devolver algunos proyectos predeterminados o todos los proyectos
+            return ResponseEntity.ok(service.getAllProjects()); // Suponiendo que el método getAllProjects exista
+        }
+        return ResponseEntity.ok(service.getProyectoById(id)); 
+
+    }
 }

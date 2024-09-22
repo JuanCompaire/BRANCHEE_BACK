@@ -82,7 +82,11 @@ public ResponseEntity<?> getCurrentUser(@RequestHeader(value = "Authorization", 
     public ResponseEntity<?> getUsers() {
         return ResponseEntity.ok(service.getUsers());
     }
-
+    @GetMapping("/getUser")//EndPoint --> /api/auth/getUser
+    public ResponseEntity<?>getUser(Integer id){
+        return ResponseEntity.ok(service.getUser(id));
+    } 
+    
     @GetMapping("/getUsersByString")//EndPoint --> /api/auth/getUsersByString
     //Method to recibe a list of user which contains a specific string
     public ResponseEntity<?> getUsersByString(@RequestParam(value = "string", required = false)String string){
@@ -93,5 +97,18 @@ public ResponseEntity<?> getCurrentUser(@RequestHeader(value = "Authorization", 
         }       
         return ResponseEntity.ok(service.getUsersByString(string));
     }
+
+    @GetMapping("/getUsersByProyectId")//EndPoint --> /api/auth/getUsersByProyectId
+    public ResponseEntity<?> getUsersByProyectId(@RequestParam(value = "id", required = false)Integer id){
+        System.out.println("Id del proyecto a buscar los usuarios : "+ id);
+        if (id == null || id <= 0) {
+            // Suponiendo que quieras devolver algunos proyectos predeterminados o todos los proyectos
+            return ResponseEntity.ok(service.getUsers()); // Suponiendo que el método getAllProjects exista
+        }
+        return ResponseEntity.ok(service.getUsersByProyectId(id)); 
+
+    }
+
+    
 
 }
