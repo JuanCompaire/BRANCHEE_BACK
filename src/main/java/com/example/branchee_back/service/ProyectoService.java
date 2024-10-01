@@ -32,6 +32,18 @@ public class ProyectoService {
         }
     }
 
+    public void editUsersProyect(Integer proyectoId, List<Integer> selectedUserIds){
+        System.out.println("El id del proyecto es : "+ proyectoId);
+        //logica de borrar todos los usuarios relacionados con ese proyecto
+        repository.deleteUsersFromProyect(proyectoId);
+        //logica de poner todos los usuarios de la lista que estan relacionados con el proyecto 
+        for (Integer userId : selectedUserIds){
+            System.out.println("Los usuarios selecionados son estos: "+ userId);
+            repository.insertProyectoUsers(proyectoId, userId);
+
+        }
+    }
+
     public List<Proyecto> getProyectsByUserId(Integer id){
         System.out.println("Se llama al getProyectsByUserId del repository con esta id : "+id);
         return repository.getProyectsByUserId(id);

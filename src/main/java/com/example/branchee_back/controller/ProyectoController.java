@@ -39,6 +39,17 @@ public class ProyectoController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+
+    @PostMapping("/edit")//EndPoint --> /api/proyect/edit
+    public void editProyecto(@RequestBody ProyectRequest request){
+        Proyecto proyecto = request.getProyecto();
+        List<Integer> selectedUserIds  = request.getSelectedUserIds();
+
+        service.editUsersProyect(proyecto.getId(),selectedUserIds);
+
+
+    }
+
     //Method to recive the proyects in which the user who log in, is participating
     @GetMapping("/getProyectsByUserId")//EndPoint --> /api/proyect/getProyectsByUserId
     public ResponseEntity<?> getProyectsByUserId(@RequestParam(value = "id", required = true)Integer id){
@@ -58,6 +69,6 @@ public class ProyectoController {
             return ResponseEntity.ok(service.getAllProjects()); // Suponiendo que el método getAllProjects exista
         }
         return ResponseEntity.ok(service.getProyectoById(id)); 
-
     }
+
 }
