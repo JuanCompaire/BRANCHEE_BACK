@@ -6,6 +6,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
@@ -40,6 +42,16 @@ public class Proyecto {
     //relation ManyToMany with user
     @ManyToMany(mappedBy = "proyectos")
     private Set<Usuario> usuarios;
+
+    //relation ManyToMany with task
+    @ManyToMany
+    @JoinTable(
+        name = "tarea_proyecto",
+        joinColumns = @JoinColumn(name = "proyecto_id"),
+        inverseJoinColumns = @JoinColumn(name = "tarea_id")
+    )
+    private Set<Tarea> tareas;
+
 
 }
 

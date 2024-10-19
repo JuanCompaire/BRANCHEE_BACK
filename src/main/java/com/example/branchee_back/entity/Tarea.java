@@ -6,6 +6,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
@@ -14,7 +16,7 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-/* 
+
 @Entity
 @Data
 @NoArgsConstructor
@@ -33,24 +35,19 @@ public class Tarea {
         strategy = GenerationType.SEQUENCE
     )
     private Integer id;
-
-    @ManyToOne
-    @JoinColumn(name = "id_proyecto") // Nombre de la columna en la tabla tarea que referencia al proyecto
-    private Proyecto proyecto;
-    
+    private Integer id_proyecto;
     private String descripcion;
     private String image;
+    private String estado;
+    private String importancia;
 
-    @OneToMany(mappedBy = "tarea")
-    private Set<Usuario> usuarios;
-
-    @OneToOne
-    @JoinColumn(name = "id_estado", referencedColumnName = "id")
-    private Estado estado;
-
-    @OneToOne
-    @JoinColumn(name = "id_importancia", referencedColumnName = "id")
-    private Importancia importancia;
+    //relation ManyToMany with Proyect
+    @ManyToMany
+    @JoinTable(
+        name = "tarea_proyecto",
+        joinColumns = @JoinColumn(name = "tarea_id"),
+        inverseJoinColumns = @JoinColumn(name = "proyecto_id")
+    )
+    private Set<Proyecto> proyectos;
 
 }
-*/
