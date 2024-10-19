@@ -36,6 +36,7 @@ public class Tarea {
     )
     private Integer id;
     private Integer id_proyecto;
+    private String name;
     private String descripcion;
     private String image;
     private String estado;
