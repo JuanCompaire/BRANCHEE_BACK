@@ -41,6 +41,8 @@ public class Tarea {
     private String image;
     private String estado;
     private String importancia;
+    private String date_create;
+    private String date_last_update;
 
     //relation ManyToMany with Proyect
     @ManyToMany
