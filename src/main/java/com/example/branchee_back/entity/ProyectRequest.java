@@ -4,6 +4,7 @@ import java.util.List;
 public class ProyectRequest {
     private Proyecto proyecto;
     private List<Integer> selectedUserIds;
+    
 
     // Getters y setters
     public Proyecto getProyecto() {

@@ -1,11 +1,18 @@
 package com.example.branchee_back.service;
 
+import com.example.branchee_back.DTO.ProjectDTO;
+import com.example.branchee_back.DTO.TareaDTO;
+import com.example.branchee_back.DTO.UsuarioDTO;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.*;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.example.branchee_back.entity.Proyecto;
@@ -49,9 +56,47 @@ public class ProyectoService {
         return repository.getProyectsByUserId(id);
     }
 
-    public Proyecto getProyectoById(Integer id){
-        System.out.println("Se llama al getProyectoById del repository con esta id : "+id);
-        return repository.getProyectoById(id);
+    public ProjectDTO getProyectoById (Integer projectId){
+        //obtain project data
+        Map<String, Object> projectData = repository.getProyectoById(projectId);
+        if (projectData == null){
+            throw new RuntimeException("Proyecto no encontrado");
+        }
+
+        //create the project DTO
+        ProjectDTO project = new ProjectDTO(
+                (Integer)  projectData.get("proyecto_id"),
+                (String) projectData.get("name_proyect"),
+                (Integer)  projectData.get("id_boss"),
+                (LocalDateTime) projectData.get("date_created")
+        );
+
+        //get the users list
+        List<Map<String, Object>> usersData = repository.getUsersByProyectId(projectId);
+
+        List<UsuarioDTO> users = usersData.stream().map(u ->
+                new UsuarioDTO(
+                        (Integer) u.get("usuario_id"),
+                        (String) u.get("username"),
+                        (String) u.get("email")
+                )
+        ).collect(Collectors.toList());
+
+        //get the task list
+        List<Map<String, Object>> tasksData = repository.getTasksFromProjectId(projectId);
+
+        List<TareaDTO> tasks = tasksData.stream().map(t ->
+                new TareaDTO(
+                        (Integer) t.get("tarea_id"),
+                        (String) t.get("name_task")
+                )
+        ).collect(Collectors.toList());
+
+
+        project.setUsuarios(users);
+        project.setTareas(tasks);
+
+        return project;
     }
 
     public Object getAllProjects() {

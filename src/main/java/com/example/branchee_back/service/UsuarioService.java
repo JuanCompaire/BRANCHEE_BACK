@@ -1,5 +1,6 @@
 package com.example.branchee_back.service;
 
+import com.example.branchee_back.DTO.UsuarioDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.example.branchee_back.entity.Usuario;
 import com.example.branchee_back.respository.UsuarioRepository;
@@ -7,7 +8,11 @@ import com.github.javafaker.Faker;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UsuarioService {
@@ -60,10 +65,24 @@ public class UsuarioService {
         System.out.println("El string que llega al repository es : "+string);
         return repository.getUsersByString(string); 
     }
-
+/*
     public Object getUsersByProyectId(Integer id){
         System.out.println("El id del proyecto para conseguir los usuarios es : "+id);
         return repository.getUsersByProyectId(id);
+    }
+*/
+    public List<UsuarioDTO> getUsersByProyectId(Integer id){
+        List<Map<String, Object>> usersData = repository.getUsersByProyectId(id);
+
+        List<UsuarioDTO> users = usersData.stream().map(u ->
+                new UsuarioDTO(
+                        (Integer) u.get("usuario_id"),
+                        (String) u.get("username"),
+                        (String) u.get("email")
+                )
+        ).collect(Collectors.toList());
+
+        return users;
     }
 
     public Usuario findUserByEmail(String email) {

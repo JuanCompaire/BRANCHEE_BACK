@@ -1,6 +1,9 @@
 package com.example.branchee_back.controller;
 
 import java.util.List;
+
+import com.example.branchee_back.DTO.ProjectDTO;
+import com.example.branchee_back.DTO.UsuarioDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,7 +34,7 @@ public class ProyectoController {
         //insert proyect in BBDD
         service.createProyecto(proyecto); ;
         //insert users and proyect in intermediate table
-        service.insertProyectoUseres(proyecto.getId(),selectedUserIds);
+        service.insertProyectoUseres(proyecto.getProyectoId(),selectedUserIds);
         // to send a message to FrontEnd
         if (proyecto != null) {             
             return ResponseEntity.ok(proyecto);
@@ -45,7 +48,7 @@ public class ProyectoController {
         Proyecto proyecto = request.getProyecto();
         List<Integer> selectedUserIds  = request.getSelectedUserIds();
 
-        service.editUsersProyect(proyecto.getId(),selectedUserIds);
+        service.editUsersProyect(proyecto.getProyectoId(),selectedUserIds);
 
 
     }
@@ -58,17 +61,17 @@ public class ProyectoController {
             // Suponiendo que quieras devolver algunos proyectos predeterminados o todos los proyectos
             return ResponseEntity.ok(service.getAllProjects()); // Suponiendo que el método getAllProjects exista
         }
-        return ResponseEntity.ok(service.getProyectsByUserId(id)); 
+        return ResponseEntity.ok(service.getProyectsByUserId(id));
     }
 
-    @GetMapping("/getProyectoById")//EndPoint --> /api/proyect/getProyectoById
-    public ResponseEntity<?> getProyectoById(@RequestParam(value = "id", required = true)Integer id){
-        System.out.println("Id del proyecto a buscar : "+ id);
-        if (id == null || id <= 0) {
-            // Suponiendo que quieras devolver algunos proyectos predeterminados o todos los proyectos
-            return ResponseEntity.ok(service.getAllProjects()); // Suponiendo que el método getAllProjects exista
+    @GetMapping("/getById")//EndPoint --> /api/proyect/getById
+    public ResponseEntity<?> getProyectoById(@RequestParam Integer id) {
+        try{
+            ProjectDTO project = service.getProyectoById(id);
+            return ResponseEntity.ok(project);
+        } catch (RuntimeException e){
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Project not found");
         }
-        return ResponseEntity.ok(service.getProyectoById(id)); 
     }
 
 }

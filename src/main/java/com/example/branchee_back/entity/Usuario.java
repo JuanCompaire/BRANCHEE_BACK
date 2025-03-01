@@ -42,7 +42,7 @@ public class Usuario {
         generator = "user_sequence",
         strategy = GenerationType.SEQUENCE
     )
-    private Integer id;
+    private Integer usuarioId;
 
     @Column(
         name = "username",
@@ -72,11 +72,11 @@ public class Usuario {
     private Set<Proyecto> proyectos;
 
    public Integer getId(){
-    return id;
+    return usuarioId;
    }
 
    public void setId(Integer id) {
-    this.id = id;
+    this.usuarioId = id;
     } 
 
    public String getEmail(){
