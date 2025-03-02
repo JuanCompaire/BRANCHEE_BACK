@@ -8,7 +8,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class ProjectDTO {
+public class    ProjectDTO {
 
     private Integer proyectoId;
     private String name_proyect;
@@ -24,7 +24,9 @@ public class ProjectDTO {
         this.id_boss = id_boss;
         this.dateCreate = dateCreate;
     }
-
+    public ProjectDTO() {
+        //TODO Auto-generated constructor stub
+    }
     public Integer getProyectoId() {
         return proyectoId;
     }

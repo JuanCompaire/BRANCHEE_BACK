@@ -51,9 +51,7 @@ public interface ProyectoRepository extends JpaRepository<Proyecto,Integer>{
     List<Map<String, Object>> getTasksFromProjectId(@Param("id") Integer id);
 
     @Transactional
-    @Query(value = "select p.*\n" +
-            "from proyecto p  \n" +
-            "where p.proyecto_id = :id;",
+    @Query(value = "select * from proyecto p where proyecto_id = :id;",
     nativeQuery = true)
     Map<String, Object> getProyectoById(@Param("id")Integer id);
 

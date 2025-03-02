@@ -30,6 +30,32 @@ public class ProyectoService {
     public void createProyecto(Proyecto proyecto) {
         repository.save(proyecto);    
     }
+
+    public void createProject (ProjectDTO projectData){
+        Proyecto project = new Proyecto();
+
+        project.setProyectoId(null);
+        project.setName_proyect(projectData.getName_proyect());
+        project.setDateCreate(projectData.getDateCreate());
+        project.setId_boss((projectData.getId_boss()));
+        project.setDateCreate(LocalDateTime.now());
+
+        repository.save(project);
+        System.out.println("se ha creado un project con estos datos: "+ project);
+
+        List<UsuarioDTO> usersData = projectData.getUsuarios();
+        
+        List<Integer> usersIdsList = new ArrayList<>();
+
+        for(UsuarioDTO user : usersData){
+            usersIdsList.add(user.getUsuarioId());
+        }
+
+        System.out.println("los ids de la userIdsList son : "+usersIdsList);
+        insertProyectoUseres(project.getProyectoId(), usersIdsList);
+
+    }
+
     //Method to insert the users and proyects in their intermediate table.
     public void insertProyectoUseres(Integer proyectoId, List<Integer> selectedUserIds){
         System.out.println("El id del proyecto es : "+ proyectoId);
@@ -58,8 +84,13 @@ public class ProyectoService {
 
     public ProjectDTO getProyectoById (Integer projectId){
         //obtain project data
+        System.out.println("La id que llega al getProyectoById service es : "+ projectId);
         Map<String, Object> projectData = repository.getProyectoById(projectId);
+        System.out.println("Despues del repository el getProyectoById es : "+
+        projectData.get("proyecto_id")+ " "+projectData.get("name_proyect")+
+         " "+projectData.get("id_boss")+ " "+projectData.get("date_created"));
         if (projectData == null){
+            System.out.println("El project da problemas y tiene esta ID : "+ projectData);
             throw new RuntimeException("Proyecto no encontrado");
         }
 
@@ -68,9 +99,10 @@ public class ProyectoService {
                 (Integer)  projectData.get("proyecto_id"),
                 (String) projectData.get("name_proyect"),
                 (Integer)  projectData.get("id_boss"),
-                (LocalDateTime) projectData.get("date_created")
+                (LocalDateTime)projectData.get("dateCreate")    
         );
-
+        System.out.println("GETPROJECTBYID data : "+ project.getProyectoId()+ " "+ project.getName_proyect()
+        + " "+ project.getId_boss()+ " "+ project.getDateCreate());
         //get the users list
         List<Map<String, Object>> usersData = repository.getUsersByProyectId(projectId);
 
@@ -98,6 +130,7 @@ public class ProyectoService {
 
         return project;
     }
+
 
     public Object getAllProjects() {
         return repository.getAllProyectos();

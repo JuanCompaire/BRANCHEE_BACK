@@ -1,6 +1,9 @@
 package com.example.branchee_back.controller;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import com.example.branchee_back.DTO.ProjectDTO;
 import com.example.branchee_back.DTO.UsuarioDTO;
@@ -23,23 +26,15 @@ public class ProyectoController {
 
     @Autowired 
     private ProyectoService service;
-    
+
     @PostMapping("/create")//EndPoint --> /api/proyect/create
     //method to create the proyect and send a message to FrontEnd
-    public ResponseEntity<Proyecto> createProyecto(@RequestBody ProyectRequest request) {
-        //convert the ProyectDTO into Proyect class with the data from FrontEnd
-        Proyecto proyecto = request.getProyecto();
-        //save in a list the users IDs,which are in the proyect
-        List<Integer> selectedUserIds = request.getSelectedUserIds();
-        //insert proyect in BBDD
-        service.createProyecto(proyecto); ;
-        //insert users and proyect in intermediate table
-        service.insertProyectoUseres(proyecto.getProyectoId(),selectedUserIds);
-        // to send a message to FrontEnd
-        if (proyecto != null) {             
-            return ResponseEntity.ok(proyecto);
-        } else {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    public ResponseEntity<?> createProyecto(@RequestBody ProjectDTO projectData) {
+        try{
+            service.createProject(projectData);
+            return ResponseEntity.ok(Map.of("message", "Project created successfully", "project", projectData));
+        } catch (RuntimeException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Project not created");
         }
     }
 
@@ -67,7 +62,9 @@ public class ProyectoController {
     @GetMapping("/getById")//EndPoint --> /api/proyect/getById
     public ResponseEntity<?> getProyectoById(@RequestParam Integer id) {
         try{
+            System.out.println("Al controoler de getById ha llegado l siguiente id : "+ id);
             ProjectDTO project = service.getProyectoById(id);
+            System.out.println("getProyectoById correct");
             return ResponseEntity.ok(project);
         } catch (RuntimeException e){
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Project not found");
