@@ -9,8 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import com.example.branchee_back.entity.ProyectRequest;
 import com.example.branchee_back.entity.Proyecto;
 import com.example.branchee_back.entity.Tarea;
 import com.example.branchee_back.service.ProyectoService;

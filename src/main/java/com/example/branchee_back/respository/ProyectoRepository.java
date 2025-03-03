@@ -61,6 +61,11 @@ public interface ProyectoRepository extends JpaRepository<Proyecto,Integer>{
 
     @Modifying
     @Transactional
+    @Query(value = "delete from proyecto p where p.proyecto_id = :id",nativeQuery = true)
+    void deleteProjectById(@Param("id")Integer id);
+
+    @Modifying
+    @Transactional
     @Query(value = "delete from usuario_proyecto up where up.proyecto_id = :id",nativeQuery = true)
     void deleteUsersFromProyect(@Param("id")Integer id);
    

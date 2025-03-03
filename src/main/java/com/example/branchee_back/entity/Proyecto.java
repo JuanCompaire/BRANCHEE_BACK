@@ -15,8 +15,8 @@ import lombok.NoArgsConstructor;
 public class Proyecto {
 
     @Id
-    @SequenceGenerator(name = "proyect_sequence", sequenceName = "proyect_sequence", allocationSize = 50)
-    @GeneratedValue(generator = "proyect_sequence", strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "proyect_sequence")
+    @SequenceGenerator(name = "proyect_sequence", sequenceName = "proyect_sequence", allocationSize = 1)
     private Integer proyectoId;
 
     private String name_proyect;

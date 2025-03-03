@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import com.example.branchee_back.entity.ProyectRequest;
 import com.example.branchee_back.entity.Proyecto;
 import com.example.branchee_back.service.ProyectoService;
 
@@ -31,7 +30,7 @@ public class ProyectoController {
     //method to create the proyect and send a message to FrontEnd
     public ResponseEntity<?> createProyecto(@RequestBody ProjectDTO projectData) {
         try{
-            service.createProject(projectData);
+            service.createProject(projectData,false);
             return ResponseEntity.ok(Map.of("message", "Project created successfully", "project", projectData));
         } catch (RuntimeException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Project not created");
@@ -39,14 +38,25 @@ public class ProyectoController {
     }
 
     @PostMapping("/edit")//EndPoint --> /api/proyect/edit
-    public void editProyecto(@RequestBody ProyectRequest request){
-        Proyecto proyecto = request.getProyecto();
-        List<Integer> selectedUserIds  = request.getSelectedUserIds();
-
-        service.editUsersProyect(proyecto.getProyectoId(),selectedUserIds);
-
-
+    public ResponseEntity<?> editProyecto(@RequestBody ProjectDTO projectData){
+        try{
+            service.deleteDataLinkToProjectId(projectData.getProyectoId()); 
+            System.out.println("Se ha hecho el deleteDataLinkToProjectId() en el edit");
+            service.createProject(projectData,true);
+            System.out.println("Se ha hecho el createProject() en el edit");
+            return ResponseEntity.ok(Map.of("message", "Project edited successfully", "project", projectData));
+        } catch (RuntimeException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Project not edited");
+        }
     }
+
+    // @PostMapping("/edit")//EndPoint --> /api/proyect/edit
+    // public void editProyecto(@RequestBody ProyectRequest request){
+    //     Proyecto proyecto = request.getProyecto();
+    //     List<Integer> selectedUserIds  = request.getSelectedUserIds();
+
+    //     service.editUsersProyect(proyecto.getProyectoId(),selectedUserIds);
+    // }
 
     //Method to recive the proyects in which the user who log in, is participating
     @GetMapping("/getProyectsByUserId")//EndPoint --> /api/proyect/getProyectsByUserId

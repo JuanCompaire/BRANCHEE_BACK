@@ -31,15 +31,27 @@ public class ProyectoService {
         repository.save(proyecto);    
     }
 
-    public void createProject (ProjectDTO projectData){
-        Proyecto project = new Proyecto();
+    public void createProject (ProjectDTO projectData,boolean edit){
+        Proyecto project;
 
-        project.setProyectoId(null);
+        if (edit){
+            Optional<Proyecto> existingProject = repository.findById(projectData.getProyectoId());
+
+            if(existingProject.isPresent()){
+                project = existingProject.get();
+            } else {
+                throw new RuntimeException("El proyecto con ID " + projectData.getProyectoId() + " no existe.");
+            }
+        } else {
+            project = new Proyecto();
+        }
+        
         project.setName_proyect(projectData.getName_proyect());
         project.setDateCreate(projectData.getDateCreate());
         project.setId_boss((projectData.getId_boss()));
         project.setDateCreate(LocalDateTime.now());
 
+        System.out.println("este es el project que se va a crear/update al repository : "+ project);
         repository.save(project);
         System.out.println("se ha creado un project con estos datos: "+ project);
 
@@ -53,7 +65,6 @@ public class ProyectoService {
 
         System.out.println("los ids de la userIdsList son : "+usersIdsList);
         insertProyectoUseres(project.getProyectoId(), usersIdsList);
-
     }
 
     //Method to insert the users and proyects in their intermediate table.
@@ -129,6 +140,12 @@ public class ProyectoService {
         project.setTareas(tasks);
 
         return project;
+    }
+
+    public void deleteDataLinkToProjectId(Integer projectId){
+        System.out.println("El id del proyecto_usuarios que se va a eliminar es : "+projectId);
+        repository.deleteUsersFromProyect(projectId);
+        //repository.deleteProjectById(projectId);
     }
 
 
