@@ -24,16 +24,10 @@ import lombok.NoArgsConstructor;
 @Table(name = "TAREA")
 public class Tarea {
 
+    
     @Id
-    @SequenceGenerator(
-        name = "tarea_sequence",  // Corregido el nombre del generador
-        sequenceName = "tarea_sequence",
-        allocationSize = 50
-    )
-    @GeneratedValue(
-        generator = "tarea_sequence",
-        strategy = GenerationType.SEQUENCE
-    )
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "tarea_sequence")
+    @SequenceGenerator(name = "tarea_sequence", sequenceName = "tarea_sequence", allocationSize = 1)
     private Integer tareaId;
     private Integer id_proyecto;
     private String name_task;
