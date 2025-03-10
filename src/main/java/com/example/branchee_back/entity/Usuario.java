@@ -71,6 +71,14 @@ public class Usuario {
     )
     private Set<Proyecto> proyectos;
 
+    @ManyToMany
+    @JoinTable(
+        name="usuario_tarea",
+        joinColumns = @JoinColumn(name = "usuario_id"),
+        inverseJoinColumns = @JoinColumn(name = "tarea_id")
+    )
+    private Set<Tarea> tareas;
+
    public Integer getId(){
     return usuarioId;
    }

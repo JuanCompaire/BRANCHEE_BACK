@@ -1,4 +1,6 @@
 package com.example.branchee_back.DTO;
+import java.util.List;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,9 +17,13 @@ public class TareaDTO {
     private String importancia;
     private String date_create;
     private String date_last_update;
+    private Integer user_id_created_task;
+    private List<UsuarioDTO> usuarios;
+
 
     public TareaDTO(Integer tareaId,String name_task,Integer id_proyecto,String descripcion,
-                    String image,String estado,String importancia,String date_create,String date_last_update){
+                    String image,String estado,String importancia,String date_create,String date_last_update,
+                    Integer user_id_created_task ){
         this.tareaId =tareaId;
         this.id_proyecto =id_proyecto;
         this.name_task =name_task;
@@ -25,8 +31,9 @@ public class TareaDTO {
         this.image =image;
         this.estado =estado;
         this.importancia =importancia;
-        this.date_create =date_create;
+        this.date_create =date_create; 
         this.date_last_update =date_last_update;
+        this.user_id_created_task = user_id_created_task;
     }
 
     public TareaDTO(Integer tareaId,String name_task){

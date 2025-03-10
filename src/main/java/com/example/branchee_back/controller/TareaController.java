@@ -29,11 +29,11 @@ public class TareaController {
     @PostMapping("/createTask")//EndPoint --> /api/task/createTask
     //method to create the task
     public ResponseEntity<Map<String,Object>> createTask(@RequestBody TareaDTO task) {
-        
+        System.out.println("El tareaDTO que llega es : "+ task);
         //insert task in BBDD
         service.createTarea(task,false); ;
         if (task != null) {             
-            return ResponseEntity.ok(Map.of("message", "Task created successfully", "project", task));
+            return ResponseEntity.ok(Map.of("message", "Task created successfully", "task", task));
         } else {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
@@ -42,7 +42,7 @@ public class TareaController {
     @PostMapping("/edit")//EndPoint --> /api/task/edit
     public ResponseEntity<?> editTask(@RequestBody TareaDTO taskData){
         try{
-            
+            service.deleteDataLinkToTaskId(taskData.getTareaId());
             service.createTarea(taskData,true);
             return ResponseEntity.ok(Map.of("message", "Task edited successfully", "task", taskData));
 

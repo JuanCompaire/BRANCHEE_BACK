@@ -2,6 +2,7 @@ package com.example.branchee_back.entity;
 
 import java.util.Set;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -37,11 +38,17 @@ public class Tarea {
     private String importancia;
     private String date_create;
     private String date_last_update;
+    private Integer user_id_created_task;
 
     @ManyToOne
     @JoinColumn(name = "id_proyecto", insertable = false, updatable = false)
     private Proyecto proyecto;
 
+    // Relación ManyToMany con usuario
+    @ManyToMany(mappedBy = "tareas", fetch = FetchType.LAZY)
+    private Set<Usuario> usuarios;
+
+    
 
     public Integer getId_proyecto() {
         return id_proyecto;
@@ -113,5 +120,21 @@ public class Tarea {
 
     public void setProyecto(Proyecto proyecto) {
         this.proyecto = proyecto;
+    }
+
+    public Integer getUser_id_created_task(){
+        return user_id_created_task;
+    }
+
+    public void setUser_created_task(Integer usuario_id){
+        this.user_id_created_task = usuario_id;
+    }
+
+    public Set<Usuario> getUsuarios() {
+        return usuarios;
+    }
+
+    public void setUsuarios(Set<Usuario> usuarios) {
+        this.usuarios = usuarios;
     }
 }

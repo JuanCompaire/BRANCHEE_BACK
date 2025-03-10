@@ -84,9 +84,17 @@ public ResponseEntity<?> getCurrentUser(@RequestHeader(value = "Authorization", 
     public ResponseEntity<?> getUsers() {
         return ResponseEntity.ok(service.getUsers());
     }
+    
     @GetMapping("/getUser")//EndPoint --> /api/auth/getUser
-    public ResponseEntity<?>getUser(Integer id){
-        return ResponseEntity.ok(service.getUser(id));
+    public ResponseEntity<?>getUser(@RequestParam Integer id){
+        try{
+            UsuarioDTO user = service.getUser(id);
+            return ResponseEntity.ok(user);
+
+        }catch (RuntimeException e){
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+        }
+        // return ResponseEntity.ok(service.getUser(id));
     } 
     
     @GetMapping("/getUsersByString")//EndPoint --> /api/auth/getUsersByString
@@ -108,9 +116,7 @@ public ResponseEntity<?> getCurrentUser(@RequestHeader(value = "Authorization", 
         } catch (RuntimeException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Project not found");
         }
-
     }
-
     
 
 }

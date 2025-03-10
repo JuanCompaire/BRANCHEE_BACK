@@ -56,8 +56,16 @@ public class UsuarioService {
         return repository.findAll();
     }
     
-    public Object getUser(Integer id){
-        return repository.findById(id);
+    public UsuarioDTO getUser(Integer userId){
+        Map<String, Object> userData = repository.findById(userId);
+
+        UsuarioDTO user = new UsuarioDTO(
+        (Integer) userData.get("usuario_id"),
+        (String) userData.get("username"),
+        (String) userData.get("email")
+        );
+
+        return user;
     }
 
     //Method to recibe a list of user which contains a specific string

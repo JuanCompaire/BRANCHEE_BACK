@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.branchee_back.DTO.TareaDTO;
+import com.example.branchee_back.DTO.UsuarioDTO;
 import com.example.branchee_back.entity.Proyecto;
 import com.example.branchee_back.entity.Tarea;
 import java.io.IOException;
@@ -13,10 +14,14 @@ import com.example.branchee_back.respository.TareaRepository;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.sql.Date;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class TareaService {
@@ -50,9 +55,32 @@ public class TareaService {
         task.setEstado(taskData.getEstado());
         task.setImportancia(taskData.getImportancia());
         task.setDate_create(taskData.getDate_create());
-        task.setDate_last_update(taskData.getDate_last_update());
+        task.setUser_id_created_task(taskData.getUser_id_created_task());
 
-        repository.save(task);   
+        LocalDateTime myDateObj = LocalDateTime.now();
+        DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+        String formattedDate = myDateObj.format(myFormatObj);
+        task.setDate_last_update(formattedDate);
+
+        repository.save(task);  
+        
+        List<UsuarioDTO> usersData = taskData.getUsuarios();
+
+        List<Integer> usersIdsList = new ArrayList<>();
+
+        for(UsuarioDTO user: usersData){
+            usersIdsList.add(user.getUsuarioId());            
+        }
+
+        insertTaskUsers(task.getTareaId(), usersIdsList);
+
+    }
+
+    public void insertTaskUsers(Integer taskId, List<Integer>selectedUserIds){ 
+        for(Integer userId : selectedUserIds){
+            repository.insertTaskUsers(taskId,userId);
+        }
+
     }
     
 
@@ -92,8 +120,21 @@ public class TareaService {
             (String) taskData.get("estado"),
             (String) taskData.get("importancia"),
             (String) taskData.get("date_create"),
-            (String) taskData.get("date_last_update")       
+            (String) taskData.get("date_last_update"),
+            (Integer) taskData.get ("user_id_created_task")     
         );
+
+        List<Map<String, Object>> usersData = repository.getUsersByTaskId(taskId);
+
+        List<UsuarioDTO> users = usersData.stream().map(u ->
+                new UsuarioDTO(
+                        (Integer) u.get("usuario_id"),
+                        (String) u.get("username"),
+                        (String) u.get("email")
+                )
+        ).collect(Collectors.toList());
+
+        task.setUsuarios(users);
 
         return task;
     }
@@ -114,5 +155,9 @@ public class TareaService {
             );
         }
         return tasksList;
+    }
+
+    public void deleteDataLinkToTaskId(Integer taskId){
+        repository.deleteUsersFromTask(taskId);
     }
 }

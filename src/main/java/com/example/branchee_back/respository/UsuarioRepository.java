@@ -32,7 +32,9 @@ public interface UsuarioRepository extends JpaRepository<Usuario,Long>{
     List<Map<String, Object>> getUsersByProyectId(@Param("id") Integer id);
 
     @Transactional
-    @Query(value = "select u.* from usuario u where u.usuario_id = :id ;", nativeQuery = true)
-    Usuario findById(@Param("id") Integer id);
+    @Query(value = "select u.usuario_id,u.username ,u.email \r\n" + //
+                "from usuario u \r\n" + //
+                "where u.usuario_id  = :id;", nativeQuery = true)
+    Map<String, Object> findById(@Param("id") Integer id);
 
 }
