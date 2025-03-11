@@ -1,6 +1,8 @@
 package com.example.branchee_back.entity;
 
 import java.util.Set;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -47,6 +49,9 @@ public class Tarea {
     // Relación ManyToMany con usuario
     @ManyToMany(mappedBy = "tareas", fetch = FetchType.LAZY)
     private Set<Usuario> usuarios;
+
+    @OneToMany(mappedBy = "tarea", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private Set<Chat> chats;
 
     
 
