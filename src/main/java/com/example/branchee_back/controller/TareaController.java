@@ -84,6 +84,7 @@ public class TareaController {
         }
     }
 
+
     @GetMapping("/getById")//EndPoint --> /api/task/getById
     public ResponseEntity<?> getTaskById(@RequestParam Integer id) {
         try{

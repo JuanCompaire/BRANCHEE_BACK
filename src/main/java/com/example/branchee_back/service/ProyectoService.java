@@ -131,7 +131,8 @@ public class ProyectoService {
         List<TareaDTO> tasks = tasksData.stream().map(t ->
                 new TareaDTO(
                         (Integer) t.get("tarea_id"),
-                        (String) t.get("name_task")
+                        (String) t.get("name_task"),
+                        (String) t.get("estado")
                 )
         ).collect(Collectors.toList());
 

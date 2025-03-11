@@ -41,6 +41,12 @@ public class TareaDTO {
         this.name_task =name_task;
     }
 
+    public TareaDTO(Integer tareaId,String name_task,String estado ){
+        this.tareaId =tareaId;
+        this.name_task =name_task;
+        this.estado =estado;
+    }
+
     public TareaDTO(Integer tareaId,String name_task,Integer id_proyecto){
         this.tareaId =tareaId;
         this.name_task =name_task;

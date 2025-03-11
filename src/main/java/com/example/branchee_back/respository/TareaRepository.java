@@ -44,6 +44,7 @@ public interface TareaRepository  extends JpaRepository<Tarea,Integer>{
     nativeQuery = true)
     List<Map<String, Object>> getUsersByTaskId(@Param("id")Integer id);
 
+
     @Modifying
     @Transactional
     @Query(value = "delete from usuario_tarea ut where ut.tarea_id = :id",nativeQuery = true)
