@@ -50,10 +50,6 @@ public class Tarea {
     @ManyToMany(mappedBy = "tareas", fetch = FetchType.LAZY)
     private Set<Usuario> usuarios;
 
-    @OneToMany(mappedBy = "tarea", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private Set<Chat> chats;
-
-    
 
     public Integer getId_proyecto() {
         return id_proyecto;

@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.example.branchee_back.DTO.ChatDTO;
 import com.example.branchee_back.DTO.TareaDTO;
 import com.example.branchee_back.entity.Proyecto;
 import com.example.branchee_back.entity.Tarea;
@@ -26,44 +27,22 @@ public class TareaController {
     @Autowired 
     private TareaService service;
 
-    @PostMapping("/createTask")//EndPoint --> /api/task/createTask
-    //method to create the task
-    public ResponseEntity<Map<String,Object>> createTask(@RequestBody TareaDTO task) {
-        System.out.println("El tareaDTO que llega es : "+ task);
-        //insert task in BBDD
-        service.createTarea(task,false); ;
-        if (task != null) {             
-            return ResponseEntity.ok(Map.of("message", "Task created successfully", "task", task));
-        } else {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
-    }
-
-    @PostMapping("/edit")//EndPoint --> /api/task/edit
-    public ResponseEntity<?> editTask(@RequestBody TareaDTO taskData){
-        try{
-            service.deleteDataLinkToTaskId(taskData.getTareaId());
-            service.createTarea(taskData,true);
-            return ResponseEntity.ok(Map.of("message", "Task edited successfully", "task", taskData));
-
-        } catch (RuntimeException e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Task not edited");
-        }
-    }
-
-    @PostMapping("/createTaskPhoto")//EndPoint --> /api/task/createTask
-    //method to create the task with photo
-    public ResponseEntity<TareaDTO> createTaskPhoto(@RequestPart("task") String taskJson,
-    @RequestPart("file") MultipartFile file){
-        try{
+    @PostMapping("/create")//EndPoint --> /api/task/create
+    public ResponseEntity<TareaDTO> createTask(
+        @RequestPart("task") String taskJson,
+        @RequestPart(value = "file", required = false) MultipartFile file) {
+        try {
             ObjectMapper objectMapper = new ObjectMapper();
             TareaDTO task = objectMapper.readValue(taskJson, TareaDTO.class);
-            //save the image in the server
-            String imagePath = service.saveImage(file);
-            task.setImage(imagePath);
 
-            //insert task in BBDD
-            service.createTarea(task,false);
+            // Si hay una imagen, la guardamos y asignamos
+            if (file != null && !file.isEmpty()) {
+                String imagePath = service.saveImage(file);
+                task.setImage(imagePath);
+            }
+
+            // Insertamos la tarea en la BBDD
+            service.createTarea(task, false);
 
             return ResponseEntity.ok()
                     .header("Content-Type", "application/json")
@@ -72,7 +51,44 @@ public class TareaController {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
-    } 
+    }
+
+    @PostMapping("/edit")//EndPoint --> /api/task/edit
+    public ResponseEntity<?> editTask(
+        @RequestPart("task") String taskJson,
+        @RequestPart(value = "file", required = false) MultipartFile file) {
+        try{
+            ObjectMapper objectMapper = new ObjectMapper();
+            TareaDTO task = objectMapper.readValue(taskJson, TareaDTO.class);
+
+            if (file != null && !file.isEmpty() && task.getChats() != null && !task.getChats().isEmpty()) {
+
+                ChatDTO lastChat = task.getChats().get(task.getChats().size() - 1);
+
+                String imagePath = service.saveImage(file);
+                
+                lastChat.setImage(imagePath);
+            }
+
+            service.edit(task);
+            return ResponseEntity.ok(Map.of("message", "Task edited successfully", "task", task));
+        }catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }  
+    }
+
+    // @PostMapping("/editNoComments")//EndPoint --> /api/task/editNoComments
+    // public ResponseEntity<?> editTaskNoComments(@RequestBody TareaDTO taskData){
+    //     try{
+    //         service.deleteDataLinkToTaskId(taskData.getTareaId());
+    //         service.createTarea(taskData,true);
+    //         return ResponseEntity.ok(Map.of("message", "Task edited successfully", "task", taskData));
+
+    //     } catch (RuntimeException e){
+    //         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Task not edited");
+    //     }
+    // }
 
     @GetMapping("/getTasksByUserId")//EndPoint --> /api/task/getTasksByUserId
     public ResponseEntity<?> getTasksByUserId (@RequestParam Integer userId){

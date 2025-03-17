@@ -30,19 +30,13 @@ import lombok.Setter;
 public class Chat {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "tarea_sequence")
-    @SequenceGenerator(name = "tarea_sequence", sequenceName = "tarea_sequence", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "chat_sequence")
+    @SequenceGenerator(name = "chat_sequence", sequenceName = "chat_sequence", allocationSize = 1)
     private Integer chatId;
-    private Integer tareaId;
-    private String name_tarea;
     private String descripcion;
     private String image;
     private String date_create_chat;
-    private String date_last_update_chat;
     private Integer user_id_created_chat;
-
-    @ManyToOne
-    @JoinColumn(name = "id_tarea", insertable = false, updatable = false)
-    private Tarea tarea;
+    private Integer id_tarea;
     
 }

@@ -1,6 +1,8 @@
 package com.example.branchee_back.DTO;
 import java.util.List;
 
+import com.example.branchee_back.entity.Chat;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -19,6 +21,7 @@ public class TareaDTO {
     private String date_last_update;
     private Integer user_id_created_task;
     private List<UsuarioDTO> usuarios;
+    private List<ChatDTO> chats;
 
 
     public TareaDTO(Integer tareaId,String name_task,Integer id_proyecto,String descripcion,

@@ -5,11 +5,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.example.branchee_back.DTO.ChatDTO;
 import com.example.branchee_back.DTO.TareaDTO;
 import com.example.branchee_back.DTO.UsuarioDTO;
+import com.example.branchee_back.entity.Chat;
 import com.example.branchee_back.entity.Proyecto;
 import com.example.branchee_back.entity.Tarea;
 import java.io.IOException;
+
+import com.example.branchee_back.respository.ChatRepository;
 import com.example.branchee_back.respository.TareaRepository;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -28,6 +32,9 @@ public class TareaService {
 
     @Autowired
     TareaRepository repository;
+
+    @Autowired
+    ChatRepository chatRepository;
 
     @Transactional
     //Method to create the task
@@ -74,13 +81,34 @@ public class TareaService {
 
         insertTaskUsers(task.getTareaId(), usersIdsList);
 
+        List<ChatDTO> chatsData = taskData.getChats();
+
+        insertChats(chatsData);
+        
+    }
+
+    public void edit(TareaDTO taskData){
+        deleteDataLinkToTaskId(taskData.getTareaId());
+        deleteChatLinkToTaskId(taskData.getTareaId());
+        createTarea(taskData,true);
     }
 
     public void insertTaskUsers(Integer taskId, List<Integer>selectedUserIds){ 
         for(Integer userId : selectedUserIds){
             repository.insertTaskUsers(taskId,userId);
         }
+    }
 
+    public void insertChats(List<ChatDTO>chats){
+        for (ChatDTO chatDTO: chats){
+            Chat chat = new Chat();
+            chat.setId_tarea(chatDTO.getId_tarea());
+            chat.setDescripcion(chatDTO.getDescripcion());
+            chat.setImage(chatDTO.getImage());
+            chat.setDate_create_chat(chatDTO.getDate_create_chat());
+            chat.setUser_id_created_chat(chatDTO.getUser_id_created_chat());
+            chatRepository.save(chat);
+        }
     }
     
 
@@ -134,7 +162,22 @@ public class TareaService {
                 )
         ).collect(Collectors.toList());
 
+        List<Map<String, Object>> chatData = repository.getChatsByTaskId(taskId);
+
+        List<ChatDTO> chats = chatData.stream().map( c ->
+            new ChatDTO(
+                (Integer) c.get("chat_id"),
+                (Integer) c.get("id_tarea"),
+                (String)  c.get("name_tarea"),
+                (String)  c.get("descripcion"),
+                (String)  c.get("image"),
+                (String)  c.get("date_create_chat"),
+                (Integer) c.get("user_id_created_chat")
+            )
+        ).collect(Collectors.toList());
+
         task.setUsuarios(users);
+        task.setChats(chats);
 
         return task;
     }
@@ -157,8 +200,11 @@ public class TareaService {
         return tasksList;
     }
 
-
     public void deleteDataLinkToTaskId(Integer taskId){
         repository.deleteUsersFromTask(taskId);
+    }
+
+    public void deleteChatLinkToTaskId(Integer taskId){
+        repository.deleteChatLinkToTaskId(taskId);
     }
 }
