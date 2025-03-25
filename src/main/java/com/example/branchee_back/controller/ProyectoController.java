@@ -72,7 +72,7 @@ public class ProyectoController {
     @GetMapping("/getById")//EndPoint --> /api/proyect/getById
     public ResponseEntity<?> getProyectoById(@RequestParam Integer id) {
         try{
-            System.out.println("Al controoler de getById ha llegado l siguiente id : "+ id);
+            System.out.println("Al controler de getById ha llegado l siguiente id : "+ id);
             ProjectDTO project = service.getProyectoById(id);
             System.out.println("getProyectoById correct");
             return ResponseEntity.ok(project);

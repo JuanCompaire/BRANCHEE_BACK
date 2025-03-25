@@ -5,8 +5,12 @@ import java.util.Set;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Getter
+@Setter
 @Entity
 @Data
 @NoArgsConstructor
@@ -23,7 +27,7 @@ public class Proyecto {
     private Integer id_boss;
 
     @Column(name = "date_created")
-    private LocalDateTime dateCreate;
+    private String dateCreate;
 
     // Relación ManyToMany con usuario
     @ManyToMany(mappedBy = "proyectos", fetch = FetchType.LAZY)
@@ -57,13 +61,6 @@ public class Proyecto {
         this.id_boss = id_boss;
     }
 
-    public LocalDateTime getDateCreate() {
-        return dateCreate;
-    }
-
-    public void setDateCreate(LocalDateTime dateCreate) {
-        this.dateCreate = dateCreate;
-    }
 
     public Set<Usuario> getUsuarios() {
         return usuarios;

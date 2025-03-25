@@ -8,6 +8,7 @@ import jakarta.persistence.PersistenceContext;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -44,12 +45,15 @@ public class ProyectoService {
             }
         } else {
             project = new Proyecto();
+            LocalDateTime myDateObj = LocalDateTime.now();
+            DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+            String formattedDate = myDateObj.format(myFormatObj);
+
+            project.setDateCreate(formattedDate);
         }
         
         project.setName_proyect(projectData.getName_proyect());
-        project.setDateCreate(projectData.getDateCreate());
         project.setId_boss((projectData.getId_boss()));
-        project.setDateCreate(LocalDateTime.now());
 
         System.out.println("este es el project que se va a crear/update al repository : "+ project);
         repository.save(project);
@@ -110,10 +114,10 @@ public class ProyectoService {
                 (Integer)  projectData.get("proyecto_id"),
                 (String) projectData.get("name_proyect"),
                 (Integer)  projectData.get("id_boss"),
-                (LocalDateTime)projectData.get("dateCreate")    
+                (String)projectData.get("date_created")    
         );
-        System.out.println("GETPROJECTBYID data : "+ project.getProyectoId()+ " "+ project.getName_proyect()
-        + " "+ project.getId_boss()+ " "+ project.getDateCreate());
+        
+        
         //get the users list
         List<Map<String, Object>> usersData = repository.getUsersByProyectId(projectId);
 
