@@ -81,4 +81,17 @@ public class ProyectoController {
         }
     }
 
+    @GetMapping("/getNameById")//EndPoint --> /api/proyect/getNameById
+    public ResponseEntity<String> getNameProjectById(@RequestParam Integer id){
+        
+        try{
+            String name_project = service.getNameProjectById(id);
+            return ResponseEntity.ok(name_project);
+        } 
+        
+        catch (RuntimeException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Project not found");
+        }
+    }
+
 }

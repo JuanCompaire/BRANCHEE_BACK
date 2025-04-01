@@ -147,6 +147,10 @@ public class ProyectoService {
         return project;
     }
 
+    public String getNameProjectById(Integer projectId){
+        return repository.getNameProjectById(projectId);
+    }
+
     public void deleteDataLinkToProjectId(Integer projectId){
         System.out.println("El id del proyecto_usuarios que se va a eliminar es : "+projectId);
         repository.deleteUsersFromProyect(projectId);

@@ -2,9 +2,7 @@ package com.example.branchee_back.respository;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
-import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -54,6 +52,11 @@ public interface ProyectoRepository extends JpaRepository<Proyecto,Integer>{
     @Query(value = "select * from proyecto p where proyecto_id = :id;",
     nativeQuery = true)
     Map<String, Object> getProyectoById(@Param("id")Integer id);
+
+    @Transactional
+    @Query(value = "select p.name_proyect from proyecto p where p.proyecto_id = :id;",
+    nativeQuery = true)
+    String getNameProjectById(@Param("id")Integer id);
 
     @Transactional
     @Query(value = "select * from proyecto;",nativeQuery = true)
