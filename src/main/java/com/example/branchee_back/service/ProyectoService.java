@@ -97,6 +97,16 @@ public class ProyectoService {
         return repository.getProyectsByUserId(id);
     }
 
+    public List<ProjectDTO> getProyectoByIdAllDetails(Integer id){
+
+        List<Proyecto> proyectosBase = repository.getProyectsByUserId(id);
+    
+        return proyectosBase.parallelStream() 
+            .map(proyecto -> getProyectoById(proyecto.getProyectoId()))
+            .collect(Collectors.toList());
+
+    }
+
     public ProjectDTO getProyectoById (Integer projectId){
         //obtain project data
         System.out.println("La id que llega al getProyectoById service es : "+ projectId);

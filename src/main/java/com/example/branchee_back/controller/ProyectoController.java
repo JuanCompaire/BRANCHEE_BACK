@@ -69,6 +69,16 @@ public class ProyectoController {
         return ResponseEntity.ok(service.getProyectsByUserId(id));
     }
 
+    @GetMapping("/getProyectosByUserIdAllDetails")//EndPoint --> /api/proyect/getProyectosByUserIdAllDetails
+    public ResponseEntity<?> getProyectosByUserIdAllDetails(@RequestParam(value = "id", required = true)Integer id){
+        try{
+            List<ProjectDTO> projects = service.getProyectoByIdAllDetails(id);
+            return ResponseEntity.ok(projects);
+        }catch (RuntimeException e){
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Project/s not found");
+        }
+    }
+
     @GetMapping("/getById")//EndPoint --> /api/proyect/getById
     public ResponseEntity<?> getProyectoById(@RequestParam Integer id) {
         try{
