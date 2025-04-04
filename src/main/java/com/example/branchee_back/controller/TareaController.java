@@ -100,6 +100,17 @@ public class TareaController {
         }
     }
 
+    @GetMapping("/getTasksByUserIdAllDetails")//EndPoint --> /api/task/getTasksByUserIdAllDetails
+    public ResponseEntity<?> getTasksByUserIdAllDetails(@RequestParam(value = "id", required = true)Integer id){
+        try{
+            List<TareaDTO> tasks = service.getTasksByIdAllDetails(id);
+            return ResponseEntity.ok(tasks);
+
+        }catch (RuntimeException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Project/s not found");
+        }
+    }
+
 
     @GetMapping("/getById")//EndPoint --> /api/task/getById
     public ResponseEntity<?> getTaskById(@RequestParam Integer id) {

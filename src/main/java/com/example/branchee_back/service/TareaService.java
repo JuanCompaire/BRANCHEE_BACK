@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 @Service
@@ -198,6 +199,15 @@ public class TareaService {
             );
         }
         return tasksList;
+    }
+
+    public List<TareaDTO> getTasksByIdAllDetails(Integer id){
+        
+        List<Tarea> tasksBase = repository.getTasksByUserIdTareaForm(id);
+
+        return tasksBase.parallelStream()
+            .map(task -> getTaskById(task.getTareaId()))
+            .collect(Collectors.toList());
     }
 
     public void deleteDataLinkToTaskId(Integer taskId){

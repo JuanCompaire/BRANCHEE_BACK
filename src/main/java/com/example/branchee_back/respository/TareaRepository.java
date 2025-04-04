@@ -32,6 +32,15 @@ public interface TareaRepository  extends JpaRepository<Tarea,Integer>{
     nativeQuery = true)
     List<Map<String, Object>> getTasksByUserId(@Param("id")Integer id);
 
+    @Transactional
+    @Query(value = "select t.*\r\n" + //
+                "from usuario u inner join usuario_proyecto up on u.usuario_id = up.usuario_id \r\n" + //
+                "inner join proyecto p on up.proyecto_id = p.proyecto_id \r\n" + //
+                "inner join tarea t on t.id_proyecto = p.proyecto_id \r\n" + //
+                "where u.usuario_id = :id;",
+    nativeQuery = true)
+    List<Tarea> getTasksByUserIdTareaForm(@Param("id")Integer id);
+
     @Modifying
     @Transactional
     //Postgres Query to insert the users and proyects in their intermediate table.
