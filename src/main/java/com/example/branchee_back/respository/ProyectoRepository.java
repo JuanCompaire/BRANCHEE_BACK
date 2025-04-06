@@ -26,13 +26,9 @@ public interface ProyectoRepository extends JpaRepository<Proyecto,Integer>{
 
     @Transactional
     @Query(value ="select p.*\r\n" + //
-                "from usuario u inner join usuario_proyecto up on u.usuario_id  = up.usuario_id \r\n" + //
-                "inner join proyecto p on up.proyecto_id = p.proyecto_id  \r\n" + //
-                "where u.usuario_id  = :id\r\n" + //
-                "union ALL\r\n" + //
-                "select p.*\r\n" + //
-                "from proyecto p\r\n" + //
-                "where id_boss = :id;",nativeQuery = true)
+                        "from usuario u inner join usuario_proyecto up on u.usuario_id  = up.usuario_id \r\n" + //
+                        "inner join proyecto p on up.proyecto_id = p.proyecto_id\r\n" + //
+                        "where u.usuario_id  = :id;",nativeQuery = true)
     List<Proyecto> getProyectsByUserId(@Param("id")Integer id);
 
     @Transactional

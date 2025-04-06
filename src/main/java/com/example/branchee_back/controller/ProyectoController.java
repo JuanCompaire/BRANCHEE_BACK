@@ -62,10 +62,7 @@ public class ProyectoController {
     @GetMapping("/getProyectsByUserId")//EndPoint --> /api/proyect/getProyectsByUserId
     public ResponseEntity<?> getProyectsByUserId(@RequestParam(value = "id", required = true)Integer id){
         System.out.println("Id de usuario para recibir los proyectos en los que participa : "+ id);
-        if (id == null || id <= 0) {
-            // Suponiendo que quieras devolver algunos proyectos predeterminados o todos los proyectos
-            return ResponseEntity.ok(service.getAllProjects()); // Suponiendo que el método getAllProjects exista
-        }
+        
         return ResponseEntity.ok(service.getProyectsByUserId(id));
     }
 

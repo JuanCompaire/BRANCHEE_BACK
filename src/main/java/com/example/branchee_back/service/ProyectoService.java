@@ -124,7 +124,8 @@ public class ProyectoService {
                 (Integer)  projectData.get("proyecto_id"),
                 (String) projectData.get("name_proyect"),
                 (Integer)  projectData.get("id_boss"),
-                (String)projectData.get("date_created")    
+                (String)projectData.get("date_created"),
+                (String)projectData.get("description")   
         );
         
         

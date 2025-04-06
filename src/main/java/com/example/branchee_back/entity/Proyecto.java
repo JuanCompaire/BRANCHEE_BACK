@@ -25,6 +25,7 @@ public class Proyecto {
 
     private String name_proyect;
     private Integer id_boss;
+    private String description;
 
     @Column(name = "date_created")
     private String dateCreate;
